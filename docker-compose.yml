@@ -46,9 +46,9 @@ services:
       # see: https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
       discovery.type: single-node
       http.port: 9200
-      http.cors.enabled: true
+      http.cors.enabled: 'true'
       http.cors.allow-origin: '*'
-      bootstrap.memory_lock: true
+      bootstrap.memory_lock: 'true'
     networks:
       - elkg
 
@@ -90,6 +90,15 @@ services:
     depends_on:
       - elasticsearch
 
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus_
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - elkg
   grafana:
     image: grafana/grafana:8.2.6
     container_name: grafana_
@@ -99,8 +108,7 @@ services:
       - "3000:3000"
     networks:
       - elkg
-    depends_on:
-      - elasticsearch
+
 networks:
   elkg:
     driver: bridge
